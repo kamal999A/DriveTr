@@ -1,5 +1,4 @@
 'use client';
-// src/app/post-listing/page.tsx  ── Post / Edit listing (V2)
 
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -14,14 +13,13 @@ const MAKES = ['BMW','Mercedes','Toyota','Honda','Ford','Audi','Volkswagen','Hyu
 const FUEL_TYPES = ['Petrol','Diesel','Hybrid','Electric','LPG'];
 const TRANSMISSIONS = ['Manual','Automatic','Semi-Automatic'];
 const CURRENT_YEAR = new Date().getFullYear();
-const YEARS = Array.from({ length: 31 }, (_, i) => CURRENT_YEAR + 1 - i); // includes next model year
+const YEARS = Array.from({ length: 31 }, (_, i) => CURRENT_YEAR + 1 - i);
 const COLOURS = ['White','Black','Silver','Red','Blue','Grey','Green','Brown','Yellow','Orange'];
 const ENGINES = ['0.9','1.0','1.2','1.4','1.5','1.6','1.8','2.0','2.2','2.5','3.0','3.5','4.0+'];
 const CITIES = ['Istanbul','Ankara','Izmir','Bursa','Antalya','Konya','Adana','Gaziantep','Kocaeli','Mersin','Diyarbakır','Hatay','Manisa','Kayseri','Samsun','Balıkesir','Kahramanmaraş','Van','Malatya','Erzurum'];
 
 type Step = 'basics' | 'details' | 'photos' | 'damage' | 'review';
 const STEPS: Step[] = ['basics', 'details', 'photos', 'damage', 'review'];
-// Step labels are set dynamically from translations below
 
 function PostListingPageInner() {
   const { user, profile, loading: authLoading } = useAuth();
@@ -35,7 +33,7 @@ function PostListingPageInner() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [photos, setPhotos] = useState<File[]>([]);
-  const [photoUrls, setPhotoUrls] = useState<string[]>([]);  // existing photos when editing
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [damage, setDamage] = useState<DamagedPart[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -46,7 +44,6 @@ function PostListingPageInner() {
     city: 'Istanbul', description: '',
   });
 
-  // Load existing listing if editing
   useEffect(() => {
     if (!editId) return;
     supabase.from('car_listings').select('*').eq('id', editId).single().then(({ data }) => {
@@ -134,9 +131,6 @@ function PostListingPageInner() {
       };
 
       if (editId) {
-        // Don't touch user_id or status when editing — preserves the
-        // original owner (an admin may be editing someone else's listing)
-        // and the listing's current active/inactive/sold state.
         const { error } = await supabase.from('car_listings').update(payload).eq('id', editId);
         if (error) throw new Error(error.message);
         router.push(`/cars/${editId}`);
@@ -162,7 +156,6 @@ function PostListingPageInner() {
       <div className="container">
         <h1 className="page-title">{editId ? t.postListing.editTitle : t.postListing.title}</h1>
 
-        {/* Step indicator */}
         <div className="step-indicator">
           {STEPS.map((s, i) => {
             const stepLabels = [t.postListing.basics, t.postListing.details, t.postListing.photos, t.postListing.damage, t.postListing.review];
@@ -184,82 +177,111 @@ function PostListingPageInner() {
         <div className="post-card card">
           {error && <div className="post-error">{error}</div>}
 
-          {/* ── STEP 1: Basics ── */}
           {step === 'basics' && (
             <div className="step-content">
-              <h2 className="step-title">{t.postListing.basics_label}</h2>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label className="form-label">{t.car.make} *</label>
-                  <select className="form-select" value={form.make} onChange={set('make')} required>
-                    <option value="">Select make...</option>
-                    {MAKES.map(m => <option key={m}>{m}</option>)}
-                  </select>
+              <div className="step-header">
+                <div className="step-header-icon">1</div>
+                <div>
+                  <h2 className="step-title">{t.postListing.basics_label}</h2>
+                  <p className="step-desc">Vehicle identity — make, model, year, colour and location.</p>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">{t.car.model} *</label>
-                  <input type="text" className="form-input" value={form.model} onChange={set('model')} placeholder="e.g. 320i, Corolla..." required />
+              </div>
+              <div className="form-section">
+                <div className="form-section-label">Vehicle</div>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">{t.car.make} *</label>
+                    <select className="form-select" value={form.make} onChange={set('make')} required>
+                      <option value="">Select make...</option>
+                      {MAKES.map(m => <option key={m}>{m}</option>)}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">{t.car.model} *</label>
+                    <input type="text" className="form-input" value={form.model} onChange={set('model')} placeholder="e.g. 320i, Corolla..." required />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">{t.car.year} *</label>
+                    <select className="form-select" value={form.year} onChange={set('year')}>
+                      {YEARS.map(y => <option key={y}>{y}</option>)}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">{t.car.colour}</label>
+                    <select className="form-select" value={form.colour} onChange={set('colour')}>
+                      {COLOURS.map(c => <option key={c}>{c}</option>)}
+                    </select>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">{t.car.year} *</label>
-                  <select className="form-select" value={form.year} onChange={set('year')}>
-                    {YEARS.map(y => <option key={y}>{y}</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">{t.car.colour}</label>
-                  <select className="form-select" value={form.colour} onChange={set('colour')}>
-                    {COLOURS.map(c => <option key={c}>{c}</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">{t.car.city}</label>
-                  <select className="form-select" value={form.city} onChange={set('city')}>
-                    {CITIES.map(c => <option key={c}>{c}</option>)}
-                  </select>
+              </div>
+              <div className="form-section">
+                <div className="form-section-label">Location</div>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">{t.car.city}</label>
+                    <select className="form-select" value={form.city} onChange={set('city')}>
+                      {CITIES.map(c => <option key={c}>{c}</option>)}
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* ── STEP 2: Details ── */}
           {step === 'details' && (
             <div className="step-content">
-              <h2 className="step-title">{t.postListing.details_label}</h2>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label className="form-label">{t.car.mileage} (km) *</label>
-                  <input type="number" className="form-input" value={form.mileage} onChange={set('mileage')} placeholder="e.g. 85000" min={0} required />
+              <div className="step-header">
+                <div className="step-header-icon">2</div>
+                <div>
+                  <h2 className="step-title">{t.postListing.details_label}</h2>
+                  <p className="step-desc">Technical specs, mileage, and asking price.</p>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">{t.car.engine}</label>
-                  <select className="form-select" value={form.engine_size} onChange={set('engine_size')}>
-                    {ENGINES.map(e => <option key={e} value={e}>{e}L</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">{t.car.fuel}</label>
-                  <select className="form-select" value={form.fuel_type} onChange={set('fuel_type')}>
-                    {FUEL_TYPES.map(f => <option key={f}>{f}</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">{t.car.transmission}</label>
-                  <select className="form-select" value={form.transmission} onChange={set('transmission')}>
-                    {TRANSMISSIONS.map(tr => <option key={tr}>{tr}</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">{t.car.price} *</label>
-                  <div className="price-input-row">
-                    <select className="form-select" value={form.currency} onChange={set('currency')} style={{ width: 80 }}>
-                      <option value="TL">₺ TL</option>
-                      <option value="EUR">€ EUR</option>
+              </div>
+              <div className="form-section">
+                <div className="form-section-label">Specs</div>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">{t.car.mileage} (km) *</label>
+                    <input type="number" className="form-input" value={form.mileage} onChange={set('mileage')} placeholder="e.g. 85000" min={0} required />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">{t.car.engine}</label>
+                    <select className="form-select" value={form.engine_size} onChange={set('engine_size')}>
+                      {ENGINES.map(e => <option key={e} value={e}>{e}L</option>)}
                     </select>
-                    <input type="number" className="form-input" value={form.price} onChange={set('price')} placeholder="e.g. 450000" min={0} required />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">{t.car.fuel}</label>
+                    <select className="form-select" value={form.fuel_type} onChange={set('fuel_type')}>
+                      {FUEL_TYPES.map(f => <option key={f}>{f}</option>)}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">{t.car.transmission}</label>
+                    <select className="form-select" value={form.transmission} onChange={set('transmission')}>
+                      {TRANSMISSIONS.map(tr => <option key={tr}>{tr}</option>)}
+                    </select>
                   </div>
                 </div>
-                <div className="form-group form-span2">
+              </div>
+              <div className="form-section">
+                <div className="form-section-label">Pricing</div>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label className="form-label">{t.car.price} *</label>
+                    <div className="price-input-row">
+                      <select className="form-select" value={form.currency} onChange={set('currency')} style={{ width: 90 }}>
+                        <option value="TL">₺ TL</option>
+                        <option value="EUR">€ EUR</option>
+                      </select>
+                      <input type="number" className="form-input" value={form.price} onChange={set('price')} placeholder="e.g. 450000" min={0} required />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="form-section">
+                <div className="form-section-label">Description</div>
+                <div className="form-group" style={{ marginTop: 4 }}>
                   <label className="form-label">{t.car.description}</label>
                   <textarea className="form-textarea" value={form.description} onChange={set('description')} placeholder="Describe the car's condition, history, extras..." rows={4} />
                 </div>
@@ -267,74 +289,103 @@ function PostListingPageInner() {
             </div>
           )}
 
-          {/* ── STEP 3: Photos ── */}
           {step === 'photos' && (
             <div className="step-content">
-              <h2 className="step-title">{t.postListing.photosTitle} <span className="step-sub">({t.postListing.photosHint})</span></h2>
-              <div
-                className="dropzone"
-                onClick={() => fileRef.current?.click()}
-                onDragOver={e => e.preventDefault()}
-                onDrop={e => { e.preventDefault(); addPhotos(e.dataTransfer.files); }}
-              >
-                <Upload size={32} className="drop-icon" />
-                <p>{t.postListing.dragDrop} <strong>{t.postListing.browse}</strong></p>
-                <span className="drop-hint">{t.postListing.photoFormat}</span>
-                <input
-                  ref={fileRef} type="file" multiple accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={e => addPhotos(e.target.files)}
-                />
+              <div className="step-header">
+                <div className="step-header-icon">3</div>
+                <div>
+                  <h2 className="step-title">{t.postListing.photosTitle}</h2>
+                  <p className="step-desc">{t.postListing.photosHint}</p>
+                </div>
+              </div>
+              <div className="form-section">
+                <div className="form-section-label">Upload</div>
+                <div
+                  className="dropzone"
+                  onClick={() => fileRef.current?.click()}
+                  onDragOver={e => e.preventDefault()}
+                  onDrop={e => { e.preventDefault(); addPhotos(e.dataTransfer.files); }}
+                >
+                  <Upload size={32} className="drop-icon" />
+                  <p>{t.postListing.dragDrop} <strong>{t.postListing.browse}</strong></p>
+                  <span className="drop-hint">{t.postListing.photoFormat}</span>
+                  <input
+                    ref={fileRef} type="file" multiple accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={e => addPhotos(e.target.files)}
+                  />
+                </div>
               </div>
 
               {(photoUrls.length > 0 || photos.length > 0) && (
-                <div className="photo-grid">
-                  {photoUrls.map((url, i) => (
-                    <div key={`ex-${i}`} className="photo-thumb">
-                      <img src={url} alt="" />
-                      <button className="photo-remove" onClick={() => removeExistingPhoto(i)}><X size={12} /></button>
-                    </div>
-                  ))}
-                  {photos.map((file, i) => (
-                    <div key={`new-${i}`} className="photo-thumb">
-                      <img src={URL.createObjectURL(file)} alt="" />
-                      <button className="photo-remove" onClick={() => removePhoto(i)}><X size={12} /></button>
-                      <span className="photo-new-badge">New</span>
-                    </div>
-                  ))}
+                <div className="form-section">
+                  <div className="form-section-label">
+                    Photos <span className="section-badge">{photoUrls.length + photos.length} / 10</span>
+                  </div>
+                  <div className="photo-grid">
+                    {photoUrls.map((url, i) => (
+                      <div key={`ex-${i}`} className="photo-thumb">
+                        <img src={url} alt="" />
+                        <button className="photo-remove" onClick={() => removeExistingPhoto(i)}><X size={12} /></button>
+                      </div>
+                    ))}
+                    {photos.map((file, i) => (
+                      <div key={`new-${i}`} className="photo-thumb">
+                        <img src={URL.createObjectURL(file)} alt="" />
+                        <button className="photo-remove" onClick={() => removePhoto(i)}><X size={12} /></button>
+                        <span className="photo-new-badge">New</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
-              <p className="photos-count">{photoUrls.length + photos.length} / 10 {t.postListing.photosSelected}</p>
             </div>
           )}
 
-          {/* ── STEP 4: Damage ── */}
           {step === 'damage' && (
             <div className="step-content">
-              <h2 className="step-title">{t.car.damage}</h2>
-              <p className="step-desc">{t.damage.subtitle}</p>
-              <CarDamageSelector value={damage} onChange={setDamage} />
+              <div className="step-header">
+                <div className="step-header-icon">4</div>
+                <div>
+                  <h2 className="step-title">{t.car.damage}</h2>
+                  <p className="step-desc">{t.damage.subtitle}</p>
+                </div>
+              </div>
+              <div className="form-section">
+                <div className="form-section-label">Damage Map</div>
+                <div style={{ marginTop: 4 }}>
+                  <CarDamageSelector value={damage} onChange={setDamage} />
+                </div>
+              </div>
             </div>
           )}
 
-          {/* ── STEP 5: Review ── */}
           {step === 'review' && (
             <div className="step-content">
-              <h2 className="step-title">{t.postListing.reviewTitle}</h2>
+              <div className="step-header">
+                <div className="step-header-icon">5</div>
+                <div>
+                  <h2 className="step-title">{t.postListing.reviewTitle}</h2>
+                  <p className="step-desc">Check everything before publishing your listing.</p>
+                </div>
+              </div>
               <div className="review-grid">
                 <div className="review-section">
-                  <h3>{t.postListing.basics_label}</h3>
+                  <div className="review-section-hd">{t.postListing.basics_label}</div>
                   <div className="review-specs">
                     {[
                       [t.car.make, form.make], [t.car.model, form.model], [t.car.year, form.year],
                       [t.car.colour, form.colour], [t.car.city, form.city],
                     ].map(([k,v]) => (
-                      <div key={k} className="review-row"><span>{k}</span><strong>{v}</strong></div>
+                      <div key={k} className="review-row">
+                        <span className="review-key">{k}</span>
+                        <strong className="review-val">{v}</strong>
+                      </div>
                     ))}
                   </div>
                 </div>
                 <div className="review-section">
-                  <h3>{t.postListing.details_label}</h3>
+                  <div className="review-section-hd">{t.postListing.details_label}</div>
                   <div className="review-specs">
                     {[
                       [t.car.mileage, `${form.mileage} km`],
@@ -342,27 +393,34 @@ function PostListingPageInner() {
                       [t.car.fuel, form.fuel_type],
                       [t.car.transmission, form.transmission],
                     ].map(([k,v]) => (
-                      <div key={k} className="review-row"><span>{k}</span><strong>{v}</strong></div>
+                      <div key={k} className="review-row">
+                        <span className="review-key">{k}</span>
+                        <strong className="review-val">{v}</strong>
+                      </div>
                     ))}
                   </div>
                 </div>
-                <div className="review-section">
-                  <h3>{t.car.price}</h3>
+                <div className="review-section review-price-section">
+                  <div className="review-section-hd">{t.car.price}</div>
                   <div className="review-price">
                     {form.currency === 'TL' ? '₺' : '€'}{parseFloat(form.price || '0').toLocaleString()}
                   </div>
+                  <div className="review-currency-badge">{form.currency}</div>
                 </div>
                 <div className="review-section">
-                  <h3>{t.car.photos}</h3>
-                  <div style={{ color: '#888', fontSize: 14 }}>
-                    {photoUrls.length + photos.length} {t.postListing.photosSelected}
+                  <div className="review-section-hd">{t.car.photos}</div>
+                  <div className="review-photos-count">
+                    <span className="review-count-num">{photoUrls.length + photos.length}</span>
+                    <span className="review-count-label">/ 10 {t.postListing.photosSelected}</span>
                   </div>
                 </div>
                 {damage.length > 0 && (
                   <div className="review-section">
-                    <h3>{t.car.damage} ({damage.length})</h3>
-                    <div style={{ color: '#ae050a', fontSize: 13 }}>
-                      {damage.map(d => d.label).join(', ')}
+                    <div className="review-section-hd">
+                      {t.car.damage} <span className="section-badge">{damage.length}</span>
+                    </div>
+                    <div className="review-damage-list">
+                      {damage.map(d => <span key={d.label} className="review-damage-tag">{d.label}</span>)}
                     </div>
                   </div>
                 )}
@@ -370,7 +428,6 @@ function PostListingPageInner() {
             </div>
           )}
 
-          {/* Navigation */}
           <div className="step-nav">
             {stepIndex > 0 && (
               <button className="btn btn-ghost" onClick={prevStep}>← {t.postListing.back}</button>
@@ -397,66 +454,81 @@ function PostListingPageInner() {
         .post-page { padding: 28px 0 60px; }
         .auth-required { min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; }
 
-        /* Step indicator */
         .step-indicator { display: flex; align-items: center; margin-bottom: 24px; }
         .step-dot { display: flex; align-items: center; gap: 8px; cursor: default; flex-shrink: 0; }
         .step-dot.done { cursor: pointer; }
-        .step-num { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; color: #666; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .step-dot.active .step-num { background: #ae050a; color: #fff; }
-        .step-dot.done .step-num { background: #1a7a1a; color: #fff; }
-        .step-label { font-size: 12px; font-weight: 600; color: #888; white-space: nowrap; }
+        .step-num { width: 30px; height: 30px; border-radius: 50%; background: #e8e8e8; color: #888; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all 0.2s; border: 2px solid transparent; }
+        .step-dot.active .step-num { background: #ae050a; color: #fff; border-color: #ae050a; box-shadow: 0 0 0 3px rgba(174,5,10,0.15); }
+        .step-dot.done .step-num { background: #1a7a1a; color: #fff; border-color: #1a7a1a; }
+        .step-label { font-size: 12px; font-weight: 600; color: #aaa; white-space: nowrap; }
         .step-dot.active .step-label { color: #ae050a; }
         .step-dot.done .step-label { color: #1a7a1a; }
-        .step-line { flex: 1; height: 2px; background: #e0e0e0; margin: 0 8px; }
+        .step-line { flex: 1; height: 2px; background: #e8e8e8; margin: 0 10px; border-radius: 2px; }
         .step-line.done { background: #1a7a1a; }
 
-        /* Post card */
-        .post-card { padding: 28px; min-height: 400px; display: flex; flex-direction: column; }
-        .post-error { background: #ffeaea; border: 1px solid #ffb3b3; color: #ae050a; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 16px; }
+        .post-card { padding: 0; min-height: 400px; display: flex; flex-direction: column; overflow: hidden; }
+        .post-error { background: #ffeaea; border: 1px solid #ffb3b3; color: #ae050a; padding: 10px 14px; font-size: 13px; margin: 20px 28px 0; border-radius: 6px; }
         .step-content { flex: 1; }
-        .step-title { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-        .step-sub { font-size: 14px; font-weight: 400; color: #888; }
-        .step-desc { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.6; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 20px; }
-        .form-span2 { grid-column: 1 / -1; }
+
+        .step-header { display: flex; align-items: flex-start; gap: 14px; padding: 22px 28px 20px; border-bottom: 1px solid #ebebeb; background: #fafafa; }
+        .step-header-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #ae050a, #c8373c); color: #fff; font-size: 15px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+        .step-title { font-family: 'Montserrat', sans-serif; font-size: 17px; font-weight: 700; margin: 0 0 3px; color: #1a1a1a; }
+        .step-desc { font-size: 13px; color: #888; margin: 0; line-height: 1.5; }
+
+        .form-section { padding: 20px 28px; border-bottom: 1px solid #f2f2f2; }
+        .form-section:last-of-type { border-bottom: none; }
+        .form-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #ae050a; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        .form-section-label::after { content: ''; flex: 1; height: 1px; background: #ebebeb; }
+        .section-badge { background: #ae050a; color: #fff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px; letter-spacing: 0; text-transform: none; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
         .price-input-row { display: flex; gap: 8px; }
 
-        /* Dropzone */
-        .dropzone { border: 2px dashed #d0d0d0; border-radius: 10px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.2s; margin: 16px 0; }
-        .dropzone:hover { border-color: #ae050a; background: #ffeaea10; }
+        .dropzone { border: 2px dashed #ddd; border-radius: 10px; padding: 40px 24px; text-align: center; cursor: pointer; transition: all 0.2s; background: #fafafa; }
+        .dropzone:hover { border-color: #ae050a; background: rgba(174,5,10,0.02); }
         .drop-icon { color: #ccc; margin: 0 auto 12px; }
-        .dropzone p { font-size: 14px; color: #555; margin-bottom: 6px; }
+        .dropzone p { font-size: 14px; color: #555; margin: 0 0 6px; }
         .drop-hint { font-size: 12px; color: #aaa; }
-        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
-        .photo-thumb { position: relative; aspect-ratio: 4/3; border-radius: 6px; overflow: hidden; }
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+        .photo-thumb { position: relative; aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; border: 1px solid #e8e8e8; }
         .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
         .photo-remove { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; }
         .photo-new-badge { position: absolute; bottom: 4px; left: 4px; background: #1a7a1a; color: #fff; font-size: 9px; padding: 1px 5px; border-radius: 3px; font-weight: 700; }
-        .photos-count { font-size: 12px; color: #888; margin-top: 10px; }
 
-        /* Review */
-        .review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 16px; }
-        .review-section { background: #f7f7f7; border-radius: 8px; padding: 16px; }
-        .review-section h3 { font-size: 13px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
-        .review-specs { display: flex; flex-direction: column; gap: 6px; }
-        .review-row { display: flex; justify-content: space-between; font-size: 13px; color: #444; }
-        .review-price { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 700; color: #ae050a; }
+        .review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; padding: 20px 28px; }
+        .review-section { background: #fff; border: 1px solid #ebebeb; border-radius: 10px; padding: 16px; }
+        .review-section-hd { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #ae050a; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f5f5f5; display: flex; align-items: center; gap: 6px; }
+        .review-specs { display: flex; flex-direction: column; }
+        .review-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f8f8f8; }
+        .review-row:last-child { border-bottom: none; }
+        .review-key { font-size: 12px; color: #888; }
+        .review-val { font-size: 13px; color: #1a1a1a; font-weight: 600; }
+        .review-price-section { background: linear-gradient(135deg, #fff8f8, #fff); border-color: #f0c0c0; }
+        .review-price { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 800; color: #ae050a; line-height: 1; margin: 4px 0; }
+        .review-currency-badge { display: inline-block; background: #ffeaea; color: #ae050a; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-top: 6px; }
+        .review-photos-count { display: flex; align-items: baseline; gap: 4px; margin-top: 4px; }
+        .review-count-num { font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 800; color: #1a1a1a; }
+        .review-count-label { font-size: 12px; color: #888; }
+        .review-damage-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+        .review-damage-tag { background: #ffeaea; color: #ae050a; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px; border: 1px solid #ffcccc; }
 
-        /* Nav */
-        .step-nav { display: flex; align-items: center; padding-top: 24px; border-top: 1px solid #f0f0f0; margin-top: 24px; gap: 10px; }
+        .step-nav { display: flex; align-items: center; padding: 18px 28px; border-top: 1px solid #ebebeb; gap: 10px; background: #fafafa; }
 
         @media (max-width: 640px) {
           .step-label { display: none; }
           .step-indicator { justify-content: center; }
-          .post-card { padding: 18px 14px; }
-          .form-grid { grid-template-columns: 1fr; }
+          .step-header { padding: 16px; gap: 10px; }
+          .step-header-icon { width: 30px; height: 30px; font-size: 13px; border-radius: 8px; }
+          .step-title { font-size: 15px; }
+          .form-section { padding: 14px 16px; }
+          .form-grid { grid-template-columns: 1fr; gap: 12px; }
           .dropzone { padding: 24px 16px; }
-          .step-nav { flex-wrap: wrap; }
+          .review-grid { padding: 14px 16px; grid-template-columns: 1fr; }
+          .step-nav { padding: 14px 16px; flex-wrap: wrap; }
+          .post-error { margin: 14px 16px 0; }
         }
         @media (max-width: 480px) {
-          .post-card { padding: 14px 12px; }
           .photo-grid { grid-template-columns: repeat(3, 1fr); }
-          .review-grid { grid-template-columns: 1fr; }
         }
       `}</style>
     </div>
@@ -464,8 +536,6 @@ function PostListingPageInner() {
 }
 
 
-// useSearchParams() requires a Suspense boundary in the App Router —
-// without this, `next build` fails while prerendering this page.
 export default function PostListingPage() {
   return (
     <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', padding: 80 }}><span className="spinner" style={{ width: 32, height: 32, borderWidth: 3 }} /></div>}>
