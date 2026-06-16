@@ -33,10 +33,16 @@ function AdminPageInner() {
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
   const [userListings, setUserListings] = useState<CarListing[]>([]);
 
-  // Announcement
+  // Announcement (in-app)
   const [annTitle, setAnnTitle] = useState('');
   const [annContent, setAnnContent] = useState('');
   const [annSent, setAnnSent] = useState(false);
+
+  // Announcement email
+  const [emailTitle, setEmailTitle] = useState('');
+  const [emailContent, setEmailContent] = useState('');
+  const [emailSending, setEmailSending] = useState(false);
+  const [emailResult, setEmailResult] = useState<{ success?: string; error?: string } | null>(null);
 
   // Contact message replies
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
@@ -163,6 +169,30 @@ function AdminPageInner() {
     setAnnContent('');
     setAnnSent(true);
     setTimeout(() => setAnnSent(false), 3000);
+  };
+
+  const sendAnnouncementEmail = async () => {
+    if (!emailTitle.trim() || !emailContent.trim() || emailSending) return;
+    setEmailSending(true);
+    setEmailResult(null);
+    try {
+      const res = await fetch('/api/send-announcement', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: emailTitle, content: emailContent }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setEmailResult({ error: data.error || 'Failed to send emails' });
+      } else {
+        setEmailResult({ success: `Email sent to ${data.count} users!` });
+        setEmailTitle('');
+        setEmailContent('');
+      }
+    } catch {
+      setEmailResult({ error: 'Network error. Please try again.' });
+    }
+    setEmailSending(false);
   };
 
   const openUser = async (u: Profile) => {
@@ -519,6 +549,8 @@ function AdminPageInner() {
           {/* ── ANNOUNCEMENTS ── */}
           {tab === 'announcements' && !loading && (
             <div className="announce-panel">
+
+              {/* In-app announcement */}
               <h2>Send Platform Announcement</h2>
               <p>This will appear as a banner on the homepage for all visitors.</p>
 
@@ -541,6 +573,42 @@ function AdminPageInner() {
                   <Send size={15} /> Send Announcement
                 </button>
               </div>
+
+              {/* Email announcement */}
+              <div className="ann-divider" />
+
+              <h2>Send Announcement Email</h2>
+              <p>This will send a real email to every registered user on the platform.</p>
+
+              {emailResult?.success && (
+                <div className="success-toast">
+                  <CheckCircle size={16} /> {emailResult.success}
+                </div>
+              )}
+              {emailResult?.error && (
+                <div className="error-toast">
+                  <XCircle size={16} /> {emailResult.error}
+                </div>
+              )}
+
+              <div className="card ann-form">
+                <div className="form-group">
+                  <label className="form-label">Subject *</label>
+                  <input type="text" className="form-input" value={emailTitle} onChange={e => setEmailTitle(e.target.value)} placeholder="e.g. Important update from DriveTR" />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Message *</label>
+                  <textarea className="form-textarea" value={emailContent} onChange={e => setEmailContent(e.target.value)} placeholder="Write your email message..." rows={6} />
+                </div>
+                <button
+                  className="btn btn-primary"
+                  onClick={sendAnnouncementEmail}
+                  disabled={!emailTitle.trim() || !emailContent.trim() || emailSending}
+                >
+                  {emailSending ? <span className="spinner" /> : <><Mail size={15} /> Send Email to All Users</>}
+                </button>
+              </div>
+
             </div>
           )}
         </div>
@@ -636,9 +704,11 @@ function AdminPageInner() {
 
         /* Announcements */
         .announce-panel h2 { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-        .announce-panel > p { font-size: 13px; color: #888; margin-bottom: 20px; }
+        .announce-panel p { font-size: 13px; color: #888; margin-bottom: 20px; }
         .ann-form { padding: 24px; display: flex; flex-direction: column; gap: 16px; max-width: 580px; }
-        .success-toast { background: #e9fbe9; border: 1px solid #a3d9a3; color: #1a7a1a; padding: 12px 16px; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 16px; }
+        .ann-divider { border: none; border-top: 1px solid #e8e8e8; margin: 32px 0; max-width: 580px; }
+        .success-toast { background: #e9fbe9; border: 1px solid #a3d9a3; color: #1a7a1a; padding: 12px 16px; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 16px; max-width: 580px; }
+        .error-toast { background: #fef2f2; border: 1px solid #fecaca; color: #ae050a; padding: 12px 16px; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 16px; max-width: 580px; }
 
         @media (max-width: 900px) { .admin-layout { grid-template-columns: 1fr; } }
 
