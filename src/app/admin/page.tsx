@@ -1,5 +1,4 @@
 'use client';
-// src/app/admin/page.tsx  ── Full admin panel
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -12,7 +11,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/lib/auth-context';
 import type { Profile, CarListing, Report, ContactMessage } from '@/types';
 
-type Tab = 'users' | 'listings' | 'reports' | 'messages' | 'announcements' | 'ratings';
+type Tab = 'users' | 'listings' | 'reports' | 'messages' | 'announcements' | 'ratings' | 'email';
 
 function AdminPageInner() {
   const { user, profile, isAdmin, loading: authLoading } = useAuth();
@@ -21,36 +20,25 @@ function AdminPageInner() {
   const supabase = createClient();
   const [tab, setTab] = useState<Tab>('users');
 
-  // Data
   const [users, setUsers] = useState<Profile[]>([]);
   const [listings, setListings] = useState<CarListing[]>([]);
   const [reports, setReports] = useState<any[]>([]);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [ratings, setRatings] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-
-  // Selected user details
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
   const [userListings, setUserListings] = useState<CarListing[]>([]);
-
-  // Announcement (in-app)
   const [annTitle, setAnnTitle] = useState('');
   const [annContent, setAnnContent] = useState('');
   const [annSent, setAnnSent] = useState(false);
-
-  // Announcement email
   const [emailTitle, setEmailTitle] = useState('');
   const [emailContent, setEmailContent] = useState('');
   const [emailSending, setEmailSending] = useState(false);
   const [emailResult, setEmailResult] = useState<{ success?: string; error?: string } | null>(null);
-
-  // Contact message replies
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState('');
   const [replySending, setReplySending] = useState(false);
   const [repliedIds, setRepliedIds] = useState<Set<string>>(new Set());
-
-  // Listing deletion
   const [listingToDelete, setListingToDelete] = useState<CarListing | null>(null);
   const [deletingListing, setDeletingListing] = useState(false);
 
@@ -65,7 +53,6 @@ function AdminPageInner() {
     fetchData();
   }, [tab, isAdmin]);
 
-  // Deep-link support: /admin?tab=users&user=<id> opens that user's detail panel
   useEffect(() => {
     const queryTab = searchParams.get('tab');
     if (queryTab === 'users' || queryTab === 'listings' || queryTab === 'reports' || queryTab === 'messages' || queryTab === 'announcements' || queryTab === 'ratings') {
@@ -151,7 +138,6 @@ function AdminPageInner() {
     });
     setReplySending(false);
     if (!error) {
-      // Reopen the support chat thread for this user if it was ended
       await supabase
         .from('support_chat_status')
         .upsert({ user_id: msg.user_id, ended: false, ended_at: null });
@@ -224,7 +210,6 @@ function AdminPageInner() {
           </button>
         </div>
 
-        {/* Tabs */}
         <div className="admin-tabs">
           {([
             { key: 'users',         label: 'Users',         icon: <Users size={15} />,   count: users.length },
@@ -233,6 +218,7 @@ function AdminPageInner() {
             { key: 'messages',      label: 'Messages',      icon: <Mail size={15} />,    count: unread || undefined },
             { key: 'ratings',       label: 'Ratings',       icon: <Star size={15} />,    count: ratings.length },
             { key: 'announcements', label: 'Announce',      icon: <Bell size={15} /> },
+            { key: 'email',         label: 'Email Users',   icon: <Mail size={15} /> },
           ] as any[]).map(tb => (
             <button
               key={tb.key}
@@ -250,7 +236,6 @@ function AdminPageInner() {
         <div className="admin-content">
           {loading && <div className="admin-loading"><span className="spinner" /></div>}
 
-          {/* ── USERS ── */}
           {tab === 'users' && !loading && (
             <div className="admin-layout">
               <div className="admin-list">
@@ -311,7 +296,6 @@ function AdminPageInner() {
                 </div>
               </div>
 
-              {/* User detail panel */}
               {selectedUser && (
                 <div className="user-detail card">
                   <div className="ud-header">
@@ -366,7 +350,6 @@ function AdminPageInner() {
             </div>
           )}
 
-          {/* ── LISTINGS ── */}
           {tab === 'listings' && !loading && (
             <div>
               <div className="list-header">
@@ -408,7 +391,6 @@ function AdminPageInner() {
             </div>
           )}
 
-          {/* ── REPORTS ── */}
           {tab === 'reports' && !loading && (
             <div>
               <div className="list-header"><h2>{reports.length} Reports</h2></div>
@@ -439,7 +421,6 @@ function AdminPageInner() {
             </div>
           )}
 
-          {/* ── CONTACT MESSAGES ── */}
           {tab === 'messages' && !loading && (
             <div>
               <div className="list-header">
@@ -506,7 +487,6 @@ function AdminPageInner() {
             </div>
           )}
 
-          {/* ── RATINGS ── */}
           {tab === 'ratings' && !loading && (
             <div>
               <div className="list-header"><h2>{ratings.length} Support Ratings</h2></div>
@@ -546,11 +526,8 @@ function AdminPageInner() {
             </div>
           )}
 
-          {/* ── ANNOUNCEMENTS ── */}
           {tab === 'announcements' && !loading && (
             <div className="announce-panel">
-
-              {/* In-app announcement */}
               <h2>Send Platform Announcement</h2>
               <p>This will appear as a banner on the homepage for all visitors.</p>
 
@@ -573,10 +550,11 @@ function AdminPageInner() {
                   <Send size={15} /> Send Announcement
                 </button>
               </div>
+            </div>
+          )}
 
-              {/* Email announcement */}
-              <div className="ann-divider" />
-
+          {tab === 'email' && !loading && (
+            <div className="announce-panel">
               <h2>Send Announcement Email</h2>
               <p>This will send a real email to every registered user on the platform.</p>
 
@@ -608,13 +586,11 @@ function AdminPageInner() {
                   {emailSending ? <span className="spinner" /> : <><Mail size={15} /> Send Email to All Users</>}
                 </button>
               </div>
-
             </div>
           )}
         </div>
       </div>
 
-      {/* ── Delete listing confirmation modal ── */}
       {listingToDelete && (
         <div className="del-overlay" onClick={() => setListingToDelete(null)}>
           <div className="del-modal" onClick={e => e.stopPropagation()}>
@@ -668,7 +644,6 @@ function AdminPageInner() {
         .user-initials { width: 28px; height: 28px; border-radius: 50%; background: #ae050a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
         .user-initials.lg { width: 44px; height: 44px; font-size: 16px; }
 
-        /* User detail panel */
         .user-detail { padding: 20px; position: sticky; top: 80px; }
         .ud-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
         .ud-header h3 { font-size: 16px; font-weight: 700; }
@@ -685,7 +660,6 @@ function AdminPageInner() {
         .icon-btn:hover { border-color: #ae050a; color: #ae050a; }
         .icon-btn.red:hover { background: #ffeaea; }
 
-        /* Messages */
         .messages-list { display: flex; flex-direction: column; gap: 12px; }
         .message-card { padding: 16px 20px; }
         .message-card.unread { border-left: 3px solid #ae050a; }
@@ -694,7 +668,6 @@ function AdminPageInner() {
         .msg-actions { display: flex; gap: 8px; }
         .reply-box { margin-top: 12px; padding-top: 12px; border-top: 1px solid #f5f5f5; }
 
-        /* Ratings */
         .ratings-list { display: flex; flex-direction: column; gap: 12px; }
         .rating-card { padding: 16px 20px; border-left: 3px solid #ae050a; }
         .rating-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; }
@@ -702,17 +675,14 @@ function AdminPageInner() {
         .rating-value { margin-left: 6px; font-size: 12px; font-weight: 700; color: #ae050a; }
         .rating-comment { font-size: 13.5px; color: #444; line-height: 1.6; background: #fafafa; border-radius: 8px; padding: 10px 12px; margin: 0; }
 
-        /* Announcements */
         .announce-panel h2 { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
         .announce-panel p { font-size: 13px; color: #888; margin-bottom: 20px; }
         .ann-form { padding: 24px; display: flex; flex-direction: column; gap: 16px; max-width: 580px; }
-        .ann-divider { border: none; border-top: 1px solid #e8e8e8; margin: 32px 0; max-width: 580px; }
         .success-toast { background: #e9fbe9; border: 1px solid #a3d9a3; color: #1a7a1a; padding: 12px 16px; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 16px; max-width: 580px; }
         .error-toast { background: #fef2f2; border: 1px solid #fecaca; color: #ae050a; padding: 12px 16px; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 16px; max-width: 580px; }
 
         @media (max-width: 900px) { .admin-layout { grid-template-columns: 1fr; } }
 
-        /* ── Delete modal ── */
         .del-overlay {
           position: fixed; inset: 0; z-index: 9999;
           background: rgba(0,0,0,0.45);
