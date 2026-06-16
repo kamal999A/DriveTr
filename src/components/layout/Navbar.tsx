@@ -611,59 +611,73 @@ export default function Navbar() {
 
         /* Burger */
         .nb-burger {
-          display: none; background: #f4f5f7;
+          display: none; background: #ae050a;
           border: none;
-          border-radius: 50%; padding: 9px;
-          color: #16181d; cursor: pointer;
+          border-radius: 8px; padding: 8px;
+          color: #fff; cursor: pointer;
           align-items: center; justify-content: center;
-          transition: all 0.15s;
+          transition: all 0.18s;
+          box-shadow: 0 2px 8px rgba(174,5,10,0.3);
         }
-        .nb-burger:hover { color: #ae050a; background: #fff0f0; }
+        .nb-burger:hover { background: #8f0408; box-shadow: 0 4px 14px rgba(174,5,10,0.45); }
 
         /* Mobile menu */
         .nb-mobile {
-          background: #fff; border-top: 1px solid #f0f0f0;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-          padding-bottom: 12px;
+          background: #fff;
+          border-top: 2px solid #ae050a;
+          box-shadow: 0 12px 40px rgba(0,0,0,0.13);
+          padding-bottom: 8px;
+          animation: menuSlide 0.22s cubic-bezier(0.22,1,0.36,1);
+        }
+        @keyframes menuSlide {
+          from { opacity: 0; transform: translateY(-10px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
         .nb-mob-user {
           display: flex; align-items: center; gap: 12px;
-          padding: 14px 20px 12px;
-          border-bottom: 1px solid #f5f5f5;
+          padding: 16px 20px 14px;
+          background: linear-gradient(135deg, #ae050a 0%, #7f0206 100%);
         }
         .nb-mob-avatar {
-          width: 40px; height: 40px; border-radius: 50%;
-          background: linear-gradient(135deg, #ae050a, #d40710);
+          width: 42px; height: 42px; border-radius: 50%;
+          background: rgba(255,255,255,0.18);
+          border: 2px solid rgba(255,255,255,0.3);
           display: flex; align-items: center; justify-content: center;
           overflow: hidden; flex-shrink: 0;
         }
-        .nb-mob-name { font-size: 14px; font-weight: 600; color: #1a1a1a; }
-        .nb-mob-email { font-size: 11px; color: #999; }
+        .nb-mob-name { font-size: 14px; font-weight: 700; color: #fff; }
+        .nb-mob-email { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 1px; }
         .nb-mob-search {
           display: flex; align-items: center; gap: 8px;
-          margin: 12px 16px; padding: 9px 13px;
-          background: #fafafa; border: 1.5px solid #e8e8e8;
+          margin: 12px 14px 8px; padding: 10px 14px;
+          background: #f8f8f8; border: 1.5px solid #ececec;
           border-radius: 10px;
         }
-        .nb-mob-links { display: flex; flex-direction: column; }
+        .nb-mob-links { display: flex; flex-direction: column; padding: 4px 0; }
         .nb-mob-link {
           display: flex; align-items: center;
-          padding: 12px 20px; font-size: 14px; font-weight: 500;
-          color: #333; text-decoration: none;
+          padding: 13px 20px; font-size: 14px; font-weight: 500;
+          color: #1a1a1a; text-decoration: none;
           border: none; background: none; width: 100%;
           text-align: left; cursor: pointer;
-          border-bottom: 1px solid #f8f8f8;
-          transition: all 0.12s;
+          border-left: 3px solid transparent;
+          transition: all 0.15s;
+          letter-spacing: 0.1px;
         }
-        .nb-mob-link:hover { color: #ae050a; background: #fff5f5; }
-        .nb-mob-post { color: #ae050a; font-weight: 700; }
+        .nb-mob-link:hover { color: #ae050a; background: #fff5f5; border-left-color: #ae050a; }
+        .nb-mob-post {
+          color: #ae050a; font-weight: 700;
+          border-left-color: #ae050a;
+          background: #fff5f5;
+        }
         .nb-mob-admin { color: #ae050a; font-weight: 700; }
         .nb-mob-out { color: #999; }
+        .nb-mob-out:hover { color: #ae050a; background: #fff5f5; border-left-color: #ae050a; }
         .nb-mob-controls {
-          display: flex; gap: 10px;
-          padding: 14px 20px 4px;
-          border-top: 1px solid #f5f5f5;
-          margin-top: 6px;
+          display: flex; gap: 10px; align-items: center;
+          padding: 12px 20px 6px;
+          border-top: 1px solid #f0f0f0;
+          margin-top: 4px;
         }
 
         /* Announcement popup */

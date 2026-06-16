@@ -138,12 +138,12 @@ export default function Footer() {
         <div className="ft-main">
 
           {/* Brand */}
-          <div style={S.brand}>
+          <div className="ft-brand" style={S.brand}>
             <Link href="/" style={{ opacity: 0.9 }}>
               <Logo size={20} color="#fff" />
             </Link>
-            <p style={S.desc}>Turkey's trusted car marketplace.<br />Buy and sell with confidence.</p>
-            <div style={S.contactRow}>
+            <p className="ft-desc" style={S.desc}>Turkey's trusted car marketplace. Buy and sell with confidence.</p>
+            <div className="ft-contact" style={S.contactRow}>
               <span>Istanbul, Turkey</span>
               <span style={S.dot} />
               <a href="mailto:support@drivetr.com" style={{ color: '#64748b', textDecoration: 'none' }}>
@@ -211,14 +211,17 @@ export default function Footer() {
           padding: 12px 0;
         }
         @media (max-width: 860px) {
-          .ft-main { grid-template-columns: 1fr; gap: 28px; padding: 24px 0 20px; }
+          .ft-main { grid-template-columns: 1fr; gap: 20px; padding: 24px 0 20px; }
         }
         @media (max-width: 560px) {
-          .ft-cols { grid-template-columns: repeat(2, 1fr); row-gap: 20px; gap: 16px; }
+          .ft-main { gap: 16px; padding: 20px 0 16px; }
+          .ft-cols { grid-template-columns: repeat(3, 1fr); gap: 8px; }
           .ft-bottom { flex-direction: column; gap: 8px; padding: 14px 0 20px; text-align: center; }
+          .ft-desc { display: none; }
+          .ft-contact { font-size: 11px; }
         }
         @media (max-width: 400px) {
-          .ft-cols { grid-template-columns: 1fr; gap: 16px; }
+          .ft-cols { grid-template-columns: repeat(3, 1fr); gap: 4px; }
         }
       `}</style>
     </footer>
