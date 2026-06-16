@@ -319,7 +319,15 @@ export default function RegisterPage() {
         @media (max-width: 768px) {
           .auth-root { grid-template-columns: 1fr; }
           .auth-left { display: none; }
-          .auth-right { min-height: 100vh; }
+          .auth-right { min-height: 100vh; padding: 32px 16px; }
+          .auth-title { font-size: 22px; }
+        }
+        @media (max-width: 480px) {
+          .field-row { grid-template-columns: 1fr; gap: 16px; }
+          .auth-form-wrap { max-width: 100%; }
+          .auth-title { font-size: 20px; }
+          .field-input { padding: 13px 14px; font-size: 16px; }
+          .auth-submit { padding: 14px; font-size: 15px; }
         }
       `}</style>
     </div>

@@ -448,6 +448,15 @@ function PostListingPageInner() {
         @media (max-width: 640px) {
           .step-label { display: none; }
           .step-indicator { justify-content: center; }
+          .post-card { padding: 18px 14px; }
+          .form-grid { grid-template-columns: 1fr; }
+          .dropzone { padding: 24px 16px; }
+          .step-nav { flex-wrap: wrap; }
+        }
+        @media (max-width: 480px) {
+          .post-card { padding: 14px 12px; }
+          .photo-grid { grid-template-columns: repeat(3, 1fr); }
+          .review-grid { grid-template-columns: 1fr; }
         }
       `}</style>
     </div>

@@ -604,6 +604,19 @@ export default function CarDetailPage() {
           .detail-title-desktop { display:none; }
           .specs-grid { grid-template-columns:repeat(2,1fr); }
         }
+        @media (max-width:600px) {
+          .specs-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+          .spec-item { padding:12px; }
+          .spec-val { font-size:15px; }
+          .gallery-thumbs { gap:6px; }
+          .gallery-thumb { width:56px; height:42px; }
+          .breadcrumb { font-size:11px; }
+          .detail-price { font-size:26px; }
+        }
+        @media (max-width:400px) {
+          .specs-grid { grid-template-columns:1fr 1fr; gap:8px; }
+          .spec-item { padding:10px; }
+        }
       `}</style>
     </>
   );

@@ -642,20 +642,32 @@ export default function HomePage() {
           .cta-card { flex-direction: column; gap: 24px; text-align: center; }
           .cta-actions { width: 100%; justify-content: center; }
         }
+        @media (max-width: 768px) {
+          .hero { padding: 80px 0 100px; min-height: 480px; }
+          .hero-sub { font-size: 15px; max-width: 100%; padding: 0 8px; }
+          .why-grid { grid-template-columns: 1fr; }
+          .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+          .cta-card { padding: 24px 20px; }
+          .cta-text h2 { font-size: 18px; }
+          .cta-btn-primary, .cta-btn-outline { padding: 11px 18px; font-size: 13px; }
+          .listings-section { padding: 20px 0 32px; }
+          .brands-section { padding: 14px 0 10px; }
+        }
         @media (max-width: 640px) {
           .brands-grid { grid-template-columns: repeat(3, 1fr); }
           .brands-header { flex-direction: column; gap: 4px; }
-          .brand-logo-wrap { width: 52px; height: 52px; }
-        }
-        @media (max-width: 768px) {
-          .hero { padding: 80px 0 100px; min-height: 500px; }
-          .why-grid { grid-template-columns: 1fr; }
-          .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+          .brand-logo-wrap { width: 52px; height: 52px; padding: 10px; }
+          .brand-name { font-size: 10.5px; }
+          .section-title { font-size: 18px; }
+          .cta-actions { flex-direction: column; }
+          .cta-btn-primary, .cta-btn-outline { width: 100%; justify-content: center; }
         }
         @media (max-width: 480px) {
-          .hero-title { letter-spacing: -1px; }
-          .si-btn span { display: none; }
-          .si-btn { padding: 13px 16px; }
+          .hero { padding: 60px 0 80px; min-height: 400px; }
+          .hero-title { letter-spacing: -1px; margin-bottom: 16px; }
+          .hero-sub { font-size: 14px; }
+          .brands-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
+          .brand-logo-wrap { width: 44px; height: 44px; padding: 8px; }
         }
       `}</style>
     </div>

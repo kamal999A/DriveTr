@@ -729,10 +729,6 @@ export default function Navbar() {
           font-family: 'Inter', sans-serif;
         }
         .ann-modal-dismiss:hover { background: #fff5f5; color: #ae050a; }
-        @media (max-width: 480px) {
-          .ann-modal { left: 12px; right: 12px; max-width: none; top: 64px; }
-        }
-
         @media (max-width: 1024px) {
           .nb-text-links, .nb-search-wrap { display: none; }
         }
@@ -743,7 +739,15 @@ export default function Navbar() {
           .nb-user-wrap { display: none; }
           .nb-login-btn { display: none; }
           .nb-pill { display: none; }
-          .nb-inner { height: 44px; }
+          .nb-sep { display: none; }
+          .nb-inner { height: 48px; padding: 0 14px; }
+          .nb-mobile { padding-bottom: env(safe-area-inset-bottom, 12px); }
+        }
+        @media (max-width: 480px) {
+          .ann-modal { left: 12px; right: 12px; max-width: none; top: 58px; }
+          .nb-mob-search { margin: 10px 12px; }
+          .nb-mob-link { padding: 13px 16px; font-size: 15px; }
+          .nb-mob-controls { padding: 12px 16px 4px; }
         }
       `}</style>
     </header>

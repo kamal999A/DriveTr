@@ -618,7 +618,6 @@ function CarsPageInner() {
         .cp-page-btn.active { background: #ae050a; border-color: #ae050a; color: #fff; }
         .cp-page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-        /* Responsive */
         @media (max-width: 900px) {
           .cp-sidebar { width: 220px; }
           .cp-topbar-inner { gap: 10px; }
@@ -626,9 +625,19 @@ function CarsPageInner() {
         @media (max-width: 720px) {
           .cp-layout { flex-direction: column; }
           .cp-sidebar { width: 100%; position: static; max-height: none; }
-          .cp-search-form { max-width: 100%; }
-          .cp-topbar-inner { flex-wrap: wrap; }
+          .cp-search-form { max-width: 100%; min-width: 0; }
+          .cp-topbar-inner { flex-wrap: wrap; gap: 8px; }
           .cp-topbar-right { width: 100%; justify-content: flex-end; }
+          .cp-page-btn { width: 34px; height: 34px; font-size: 13px; }
+        }
+        @media (max-width: 480px) {
+          .cp-topbar { padding: 10px 0; }
+          .cp-topbar-inner { gap: 6px; }
+          .cp-search-form { font-size: 14px; }
+          .cp-filter-btn { font-size: 12px; padding: 7px 10px; }
+          .cp-sort-wrap select { font-size: 12px; padding: 7px 8px; }
+          .cp-results { font-size: 12px; }
+          .cp-pagination { gap: 4px; flex-wrap: wrap; justify-content: center; }
         }
       `}</style>
     </div>

@@ -528,13 +528,21 @@ function ProfilePageInner() {
         .pf-empty h3 { font-size:18px; font-weight:700; color:#334155; margin:0; }
         .pf-empty p  { font-size:14px; margin:0; }
 
-        /* Responsive */
         @media (max-width:880px) {
           .pf-grid { grid-template-columns:1fr; }
           .pf-hero-inner { flex-direction:column; align-items:flex-start; }
         }
         @media (max-width:560px) {
           .pf-hero-actions { flex-direction:column; width:100%; }
+          .pf-hero { padding: 28px 0 24px; }
+          .pf-hero-inner { gap: 16px; }
+          .pf-name { font-size: 20px; }
+          .pf-tabs { overflow-x: auto; gap: 4px; }
+          .pf-tab { font-size: 13px; padding: 8px 12px; white-space: nowrap; }
+        }
+        @media (max-width:400px) {
+          .pf-avatar-ring { width: 72px; height: 72px; }
+          .pf-post-btn { width: 100%; justify-content: center; }
         }
       `}</style>
     </div>

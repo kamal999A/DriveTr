@@ -211,11 +211,14 @@ export default function Footer() {
           padding: 12px 0;
         }
         @media (max-width: 860px) {
-          .ft-main { grid-template-columns: 1fr; gap: 28px; }
+          .ft-main { grid-template-columns: 1fr; gap: 28px; padding: 24px 0 20px; }
         }
         @media (max-width: 560px) {
-          .ft-cols { grid-template-columns: repeat(2, 1fr); row-gap: 24px; }
-          .ft-bottom { flex-direction: column; gap: 8px; padding: 14px 0 18px; }
+          .ft-cols { grid-template-columns: repeat(2, 1fr); row-gap: 20px; gap: 16px; }
+          .ft-bottom { flex-direction: column; gap: 8px; padding: 14px 0 20px; text-align: center; }
+        }
+        @media (max-width: 400px) {
+          .ft-cols { grid-template-columns: 1fr; gap: 16px; }
         }
       `}</style>
     </footer>

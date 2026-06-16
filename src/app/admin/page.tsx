@@ -682,6 +682,23 @@ function AdminPageInner() {
         .error-toast { background: #fef2f2; border: 1px solid #fecaca; color: #ae050a; padding: 12px 16px; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 16px; max-width: 580px; }
 
         @media (max-width: 900px) { .admin-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) {
+          .admin-header { flex-wrap: wrap; gap: 10px; }
+          .admin-tabs { gap: 2px; }
+          .admin-tab { font-size: 12px; padding: 8px 10px; gap: 5px; }
+          .table-wrap { font-size: 12px; }
+          .admin-table th { font-size: 10px; padding: 8px 10px; }
+          .admin-table td { padding: 8px 10px; }
+          .ann-form { padding: 16px; }
+        }
+        @media (max-width: 480px) {
+          .admin-title { font-size: 18px; }
+          .admin-tab { padding: 8px 8px; font-size: 11px; }
+          .icon-btn { padding: 4px 5px; }
+          .ud-header { flex-wrap: wrap; }
+          .message-card { padding: 12px 14px; }
+          .rating-card { padding: 12px 14px; }
+        }
 
         .del-overlay {
           position: fixed; inset: 0; z-index: 9999;
