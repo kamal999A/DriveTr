@@ -320,15 +320,16 @@ export default function Navbar() {
           </div>
 
           <div className="nb-mob-controls">
-            <div className="nb-pill">
-              <button className={`nb-pill-btn ${lang === 'tr' ? 'on' : ''}`} onClick={() => setLang('tr')}>TR</button>
-              <span className="nb-pill-div" />
-              <button className={`nb-pill-btn ${lang === 'en' ? 'on' : ''}`} onClick={() => setLang('en')}>EN</button>
+            <div className="nb-mob-controls-label">Language</div>
+            <div className="nb-mob-toggles">
+              <button className={`nb-mob-toggle ${lang === 'tr' ? 'active' : ''}`} onClick={() => setLang('tr')}>TR</button>
+              <button className={`nb-mob-toggle ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>EN</button>
             </div>
-            <div className="nb-pill">
-              <button className={`nb-pill-btn ${currency === 'TL' ? 'on' : ''}`} onClick={() => setCurrency('TL')}>₺ TL</button>
-              <span className="nb-pill-div" />
-              <button className={`nb-pill-btn ${currency === 'EUR' ? 'on' : ''}`} onClick={() => setCurrency('EUR')}>€ EUR</button>
+            <div className="nb-mob-controls-sep" />
+            <div className="nb-mob-controls-label">Currency</div>
+            <div className="nb-mob-toggles">
+              <button className={`nb-mob-toggle ${currency === 'TL' ? 'active' : ''}`} onClick={() => setCurrency('TL')}>₺ TL</button>
+              <button className={`nb-mob-toggle ${currency === 'EUR' ? 'active' : ''}`} onClick={() => setCurrency('EUR')}>€ EUR</button>
             </div>
           </div>
         </div>
@@ -649,35 +650,66 @@ export default function Navbar() {
         .nb-mob-email { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 1px; }
         .nb-mob-search {
           display: flex; align-items: center; gap: 8px;
-          margin: 12px 14px 8px; padding: 10px 14px;
+          margin: 12px 14px 6px; padding: 11px 14px;
           background: #f8f8f8; border: 1.5px solid #ececec;
-          border-radius: 10px;
+          border-radius: 12px;
         }
-        .nb-mob-links { display: flex; flex-direction: column; padding: 4px 0; }
+        .nb-mob-links {
+          display: flex; flex-direction: column;
+          padding: 8px 14px; gap: 6px;
+        }
         .nb-mob-link {
           display: flex; align-items: center;
-          padding: 13px 20px; font-size: 14px; font-weight: 500;
+          padding: 13px 16px; font-size: 14px; font-weight: 500;
           color: #1a1a1a; text-decoration: none;
-          border: none; background: none; width: 100%;
+          border: none; background: #f8f9fb; width: 100%;
           text-align: left; cursor: pointer;
-          border-left: 3px solid transparent;
+          border-radius: 12px;
+          border: 1.5px solid #efefef;
           transition: all 0.15s;
           letter-spacing: 0.1px;
         }
-        .nb-mob-link:hover { color: #ae050a; background: #fff5f5; border-left-color: #ae050a; }
+        .nb-mob-link:hover { color: #ae050a; background: #fff5f5; border-color: #fcd0d0; }
         .nb-mob-post {
-          color: #ae050a; font-weight: 700;
-          border-left-color: #ae050a;
-          background: #fff5f5;
+          color: #fff; font-weight: 700;
+          background: linear-gradient(135deg, #ae050a, #d40710);
+          border-color: transparent;
+          box-shadow: 0 3px 12px rgba(174,5,10,0.3);
         }
-        .nb-mob-admin { color: #ae050a; font-weight: 700; }
-        .nb-mob-out { color: #999; }
-        .nb-mob-out:hover { color: #ae050a; background: #fff5f5; border-left-color: #ae050a; }
+        .nb-mob-post:hover { background: linear-gradient(135deg, #8f0408, #ae050a); color: #fff; border-color: transparent; }
+        .nb-mob-admin {
+          color: #ae050a; font-weight: 700;
+          background: #fff5f5; border-color: #fcd0d0;
+        }
+        .nb-mob-out {
+          color: #999; background: #fafafa; border-color: #efefef;
+        }
+        .nb-mob-out:hover { color: #ae050a; background: #fff5f5; border-color: #fcd0d0; }
         .nb-mob-controls {
-          display: flex; gap: 10px; align-items: center;
-          padding: 12px 20px 6px;
+          padding: 12px 14px 14px;
           border-top: 1px solid #f0f0f0;
           margin-top: 4px;
+          display: flex; flex-direction: column; gap: 10px;
+        }
+        .nb-mob-controls-label {
+          font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+          text-transform: uppercase; color: #bbb;
+          margin-bottom: -4px;
+        }
+        .nb-mob-controls-sep { height: 1px; background: #f0f0f0; }
+        .nb-mob-toggles { display: flex; gap: 8px; }
+        .nb-mob-toggle {
+          flex: 1; padding: 10px; border-radius: 10px;
+          font-size: 13px; font-weight: 700; cursor: pointer;
+          border: 1.5px solid #efefef; background: #f8f9fb;
+          color: #888; transition: all 0.15s;
+          font-family: 'Inter', sans-serif;
+        }
+        .nb-mob-toggle:hover { border-color: #fcd0d0; color: #ae050a; background: #fff5f5; }
+        .nb-mob-toggle.active {
+          background: #ae050a; color: #fff;
+          border-color: #ae050a;
+          box-shadow: 0 2px 8px rgba(174,5,10,0.3);
         }
 
         /* Announcement popup */
