@@ -466,19 +466,19 @@ function PostListingPageInner() {
         .step-line { flex: 1; height: 2px; background: #e8e8e8; margin: 0 10px; border-radius: 2px; }
         .step-line.done { background: #1a7a1a; }
 
-        .post-card { padding: 0; min-height: 400px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #d8d8d8; }
+        .post-card { padding: 0; min-height: 400px; display: flex; flex-direction: column; overflow: hidden; border: 2px solid #e8b4b4; }
         .post-error { background: #ffeaea; border: 1px solid #ffb3b3; color: #ae050a; padding: 10px 14px; font-size: 13px; margin: 20px 28px 0; border-radius: 6px; }
         .step-content { flex: 1; }
 
-        .step-header { display: flex; align-items: flex-start; gap: 14px; padding: 22px 28px 20px; border-bottom: 1px solid #e0e0e0; background: #fafafa; }
+        .step-header { display: flex; align-items: flex-start; gap: 14px; padding: 22px 28px 20px; border-bottom: 2px solid #f0c0c0; background: #fff8f8; }
         .step-header-icon { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #ae050a, #c8373c); color: #fff; font-size: 15px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
         .step-title { font-family: 'Montserrat', sans-serif; font-size: 17px; font-weight: 700; margin: 0 0 3px; color: #1a1a1a; }
         .step-desc { font-size: 13px; color: #888; margin: 0; line-height: 1.5; }
 
-        .form-section { padding: 20px 28px; border-bottom: 1px solid #e0e0e0; }
+        .form-section { padding: 20px 28px; border-bottom: 1px solid #f0c0c0; }
         .form-section:last-of-type { border-bottom: none; }
         .form-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #ae050a; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-        .form-section-label::after { content: ''; flex: 1; height: 1px; background: #e0e0e0; }
+        .form-section-label::after { content: ''; flex: 1; height: 2px; background: linear-gradient(to right, #e8b4b4, transparent); }
         .section-badge { background: #ae050a; color: #fff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px; letter-spacing: 0; text-transform: none; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
         .form-group { display: flex; flex-direction: column; gap: 5px; }
@@ -512,7 +512,7 @@ function PostListingPageInner() {
         .review-damage-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
         .review-damage-tag { background: #ffeaea; color: #ae050a; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px; border: 1px solid #ffcccc; }
 
-        .step-nav { display: flex; align-items: center; padding: 18px 28px; border-top: 1px solid #e0e0e0; gap: 10px; background: #fafafa; }
+        .step-nav { display: flex; align-items: center; padding: 18px 28px; border-top: 2px solid #f0c0c0; gap: 10px; background: #fff8f8; }
 
         @media (max-width: 640px) {
           .step-label { display: none; }
