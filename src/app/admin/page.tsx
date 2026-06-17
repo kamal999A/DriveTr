@@ -20,7 +20,7 @@ function AdminPageInner() {
   const supabase = createClient();
   const [tab, setTab] = useState<Tab>('users');
 
-  const [users, setUsers] = useState<Profile[]>([]);
+  const [users, setUsers] = useState<(Profile & { listing_count: number })[]>([]);
   const [listings, setListings] = useState<CarListing[]>([]);
   const [reports, setReports] = useState<any[]>([]);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
@@ -72,8 +72,14 @@ function AdminPageInner() {
   const fetchData = async () => {
     setLoading(true);
     if (tab === 'users') {
-      const { data } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
-      if (data) setUsers(data as Profile[]);
+      const { data } = await supabase
+        .from('profiles')
+        .select('*, car_listings(count)')
+        .order('created_at', { ascending: false });
+      if (data) setUsers(data.map(u => ({
+        ...u,
+        listing_count: (u.car_listings as any)?.[0]?.count ?? 0,
+      })) as any);
     } else if (tab === 'listings') {
       const { data } = await supabase
         .from('car_listings')
@@ -274,7 +280,7 @@ function AdminPageInner() {
                           </td>
                           <td className="muted">{u.email}</td>
                           <td className="muted">{u.phone || '—'}</td>
-                          <td>—</td>
+                          <td>{(u as any).listing_count ?? 0}</td>
                           <td>
                             {u.is_blocked
                               ? <span className="badge badge-red">Blocked</span>
