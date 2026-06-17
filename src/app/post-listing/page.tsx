@@ -482,6 +482,7 @@ function PostListingPageInner() {
         .section-badge { background: #ae050a; color: #fff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px; letter-spacing: 0; text-transform: none; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
         .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group .form-label { color: #1a1a1a; font-weight: 600; }
         .price-input-row { display: flex; gap: 8px; }
 
         .dropzone { border: 2px dashed #ddd; border-radius: 10px; padding: 40px 24px; text-align: center; cursor: pointer; transition: all 0.2s; background: #fafafa; }
