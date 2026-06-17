@@ -41,6 +41,8 @@ function AdminPageInner() {
   const [repliedIds, setRepliedIds] = useState<Set<string>>(new Set());
   const [listingToDelete, setListingToDelete] = useState<CarListing | null>(null);
   const [deletingListing, setDeletingListing] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState<ContactMessage | null>(null);
+  const [deletingMessage, setDeletingMessage] = useState(false);
 
   useEffect(() => {
     if (!authLoading && (!user || !isAdmin)) {
@@ -120,6 +122,15 @@ function AdminPageInner() {
     setUserListings(prev => prev.filter(l => l.id !== listingToDelete.id));
     setDeletingListing(false);
     setListingToDelete(null);
+  };
+
+  const deleteMessage = async () => {
+    if (!messageToDelete || deletingMessage) return;
+    setDeletingMessage(true);
+    await supabase.from('contact_messages').delete().eq('id', messageToDelete.id);
+    setMessages(prev => prev.filter(m => m.id !== messageToDelete.id));
+    setDeletingMessage(false);
+    setMessageToDelete(null);
   };
 
   const markMessageRead = async (id: string) => {
@@ -457,6 +468,12 @@ function AdminPageInner() {
                             <Reply size={13} /> Reply
                           </button>
                         )}
+                        <button
+                          className="btn btn-ghost btn-sm msg-delete-btn"
+                          onClick={() => setMessageToDelete(m)}
+                        >
+                          <Trash2 size={13} /> Delete
+                        </button>
                       </div>
                       {replyingTo === m.id && (
                         <div className="reply-box">
@@ -591,6 +608,27 @@ function AdminPageInner() {
         </div>
       </div>
 
+      {messageToDelete && (
+        <div className="del-overlay" onClick={() => setMessageToDelete(null)}>
+          <div className="del-modal" onClick={e => e.stopPropagation()}>
+            <div className="del-icon"><Trash2 size={28} /></div>
+            <h3 className="del-title">Delete Message</h3>
+            <p className="del-body">
+              Delete message from &ldquo;{messageToDelete.name}&rdquo;?
+              <br />This cannot be undone.
+            </p>
+            <div className="del-actions">
+              <button className="del-btn del-cancel" onClick={() => setMessageToDelete(null)}>
+                Cancel
+              </button>
+              <button className="del-btn del-confirm" onClick={deleteMessage} disabled={deletingMessage}>
+                {deletingMessage ? <span className="spinner" /> : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {listingToDelete && (
         <div className="del-overlay" onClick={() => setListingToDelete(null)}>
           <div className="del-modal" onClick={e => e.stopPropagation()}>
@@ -665,7 +703,9 @@ function AdminPageInner() {
         .message-card.unread { border-left: 3px solid #ae050a; }
         .msg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; }
         .msg-body { font-size: 14px; color: #444; line-height: 1.6; margin-bottom: 10px; }
-        .msg-actions { display: flex; gap: 8px; }
+        .msg-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .msg-delete-btn { color: #ae050a !important; }
+        .msg-delete-btn:hover { background: #ffeaea !important; }
         .reply-box { margin-top: 12px; padding-top: 12px; border-top: 1px solid #f5f5f5; }
 
         .ratings-list { display: flex; flex-direction: column; gap: 12px; }
