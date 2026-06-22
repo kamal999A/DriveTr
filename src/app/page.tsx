@@ -26,7 +26,7 @@ const MAKES = [
 ];
 
 const BRAND_LOGOS = [
-  { name: 'BMW',        logo: 'https://www.carlogos.org/car-logos/bmw-logo.png' },
+  { name: 'Tesla',      logo: 'https://www.carlogos.org/car-logos/tesla-logo.png' },
   { name: 'Mercedes',   logo: 'https://www.carlogos.org/car-logos/mercedes-benz-logo.png' },
   { name: 'Toyota',     logo: 'https://www.carlogos.org/car-logos/toyota-logo.png' },
   { name: 'Honda',      logo: 'https://www.carlogos.org/car-logos/honda-logo-2000.png' },
