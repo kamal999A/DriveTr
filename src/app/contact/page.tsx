@@ -188,7 +188,7 @@ export default function ContactPage() {
           font-family: 'Montserrat', sans-serif;
           font-size: 22px; font-weight: 800; margin-bottom: 12px; color: #1a1a1a;
         }
-        .contact-info > p { font-size: 14.5px; color: #777; line-height: 1.75; margin-bottom: 26px; }
+        .contact-info > p { font-size: 14.5px; color: #1a1a1a; line-height: 1.75; margin-bottom: 26px; }
         .info-items { display: flex; flex-direction: column; gap: 14px; }
         .info-item {
           display: flex; align-items: center; gap: 14px;
@@ -226,7 +226,8 @@ export default function ContactPage() {
         .form-error { background: #ffeaea; border: 1px solid #ffb3b3; color: #ae050a; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
         .contact-form { display: flex; flex-direction: column; gap: 16px; margin-top: 18px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .reply-notice { font-size: 12.5px; color: #999; margin: 0; }
+        .reply-notice { font-size: 12.5px; color: #1a1a1a; margin: 0; }
+        .contact-form .form-label { color: #1a1a1a; font-weight: 600; }
 
         /* ── Sent / Sign-in states ── */
         .sent-state, .signin-state {
@@ -242,7 +243,7 @@ export default function ContactPage() {
           box-shadow: 0 8px 24px rgba(22,163,74,0.3);
         }
         .sent-state h3, .signin-state h3 { font-family: 'Montserrat', sans-serif; font-size: 19px; font-weight: 700; color: #1a1a1a; }
-        .sent-state p, .signin-state p { color: #777; font-size: 14px; line-height: 1.6; margin: 0 0 6px; }
+        .sent-state p, .signin-state p { color: #1a1a1a; font-size: 14px; line-height: 1.6; margin: 0 0 6px; }
         .signin-icon {
           width: 56px; height: 56px; border-radius: 50%;
           background: linear-gradient(135deg, #ae050a 0%, #7f0206 100%);
