@@ -395,7 +395,7 @@ export default function CarDamageSelector({ value, onChange, readOnly = false }:
         .ds-list{flex:1;overflow-y:auto;padding:4px;display:flex;flex-direction:column;gap:1px}
         .ds-list::-webkit-scrollbar{width:3px}
         .ds-list::-webkit-scrollbar-thumb{background:#f0c0c0;border-radius:2px}
-        .ds-item{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:6px;background:none;border:1px solid transparent;cursor:pointer;text-align:left;width:100%;font-size:12px;color:#444;transition:all .12s}
+        .ds-item{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:6px;background:none;border:1px solid transparent;cursor:pointer;text-align:left;width:100%;font-size:12px;color:#1a1a1a;transition:all .12s}
         .ds-item:hover,.ds-item.hov{background:#fff5f5;border-color:#f0c0c0;color:#1a1a1a}
         .ds-item.dmg{background:#ffeaea;border-color:#f0a0a0;color:#ae050a;font-weight:600}
         .ds-item-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

@@ -151,9 +151,6 @@ function CarsPageInner() {
                 </button>
               )}
             </div>
-            <button type="submit" className="cp-search-btn">
-              <Search size={15} /> Search
-            </button>
           </form>
 
           <div className="cp-topbar-right">
