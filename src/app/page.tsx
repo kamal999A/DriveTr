@@ -131,7 +131,6 @@ export default function HomePage() {
       <section className="brands-section">
         <div className="container">
           <div className="brands-header" data-reveal>
-            <span className="brands-label">{t.home.manufacturers}</span>
             <h2 className="brands-title">{t.home.browseByBrand}</h2>
           </div>
           <div className="brands-grid">

@@ -317,18 +317,12 @@ export default function CarDamageSelector({ value, onChange, readOnly = false }:
 
   return (
     <div className="ds-root">
-      <div className="ds-hdr">
-        <div className="ds-hdr-left">
-          <span>🔧</span>
-          <div>
-            <div className="ds-hdr-title">{dm.title}</div>
-            <div className="ds-hdr-sub">Click a part to mark damage • Drag to rotate • Scroll to zoom</div>
-          </div>
-        </div>
-        {!readOnly && value.length > 0 && (
+      {!readOnly && value.length > 0 && (
+        <div className="ds-hdr">
+          <div className="ds-hdr-left" />
           <button className="ds-clear-btn" onClick={() => onChange([])}>Clear all</button>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="ds-body">
         <div className="ds-canvas-wrap">
@@ -383,45 +377,43 @@ export default function CarDamageSelector({ value, onChange, readOnly = false }:
       {toast && <div className="ds-toast">{toast}</div>}
 
       <style jsx>{`
-        .ds-root{background:#0d1117;border-radius:14px;overflow:hidden;border:1px solid #1e2d3d;font-family:'Inter',system-ui,sans-serif;box-shadow:0 8px 32px rgba(0,0,0,.4)}
-        .ds-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(90deg,#090e16,#0d1520);border-bottom:1px solid #1e2d3d;gap:12px}
+        .ds-root{background:#fff;border-radius:14px;overflow:hidden;border:2px solid #ae050a;font-family:'Inter',system-ui,sans-serif;box-shadow:0 8px 32px rgba(0,0,0,.08)}
+        .ds-hdr{display:flex;align-items:center;justify-content:flex-end;padding:14px 18px;background:#fff;border-bottom:1px solid #f0c0c0;gap:12px}
         .ds-hdr-left{display:flex;align-items:center;gap:12px}
-        .ds-hdr-title{font-size:15px;font-weight:700;color:#e2ecf8}
-        .ds-hdr-sub{font-size:11px;color:#3a5068;margin-top:2px}
-        .ds-clear-btn{padding:6px 14px;border-radius:6px;border:1px solid #2a3d55;background:none;color:#6a8da8;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
-        .ds-clear-btn:hover{border-color:#ae050a;color:#ff6666}
+        .ds-clear-btn{padding:6px 14px;border-radius:6px;border:1px solid #ae050a;background:none;color:#ae050a;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+        .ds-clear-btn:hover{background:#ae050a;color:#fff}
         .ds-body{display:flex;height:520px}
         .ds-canvas-wrap{flex:1;position:relative;min-width:0;overflow:hidden}
         .ds-canvas{width:100%;height:100%;cursor:grab;touch-action:none;display:block}
         .ds-canvas:active{cursor:grabbing}
         .ds-hover-label{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(9,14,22,.9);backdrop-filter:blur(8px);color:#a0c0e0;padding:5px 14px;border-radius:99px;font-size:12px;font-weight:600;pointer-events:none;border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:8px;white-space:nowrap}
         .ds-dmg-tag{background:#ae050a;color:#fff;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:800}
-        .ds-panel{width:220px;flex-shrink:0;background:#090e16;border-left:1px solid #1e2d3d;display:flex;flex-direction:column;overflow:hidden}
-        .ds-panel-top{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e2d3d;flex-shrink:0}
-        .ds-panel-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#3a5068}
+        .ds-panel{width:220px;flex-shrink:0;background:#fff;border-left:2px solid #ae050a;display:flex;flex-direction:column;overflow:hidden}
+        .ds-panel-top{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0c0c0;flex-shrink:0}
+        .ds-panel-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#ae050a}
         .ds-badge{background:#ae050a;color:#fff;font-size:9px;padding:2px 7px;border-radius:99px;font-weight:700}
         .ds-list{flex:1;overflow-y:auto;padding:4px;display:flex;flex-direction:column;gap:1px}
         .ds-list::-webkit-scrollbar{width:3px}
-        .ds-list::-webkit-scrollbar-thumb{background:#1e2d3d;border-radius:2px}
-        .ds-item{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:6px;background:none;border:1px solid transparent;cursor:pointer;text-align:left;width:100%;font-size:12px;color:#4a6880;transition:all .12s}
-        .ds-item:hover,.ds-item.hov{background:#0e1c2c;border-color:#264468;color:#a0c0d8}
-        .ds-item.dmg{background:#160505;border-color:#3a1010;color:#ff8888;font-weight:600}
+        .ds-list::-webkit-scrollbar-thumb{background:#f0c0c0;border-radius:2px}
+        .ds-item{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:6px;background:none;border:1px solid transparent;cursor:pointer;text-align:left;width:100%;font-size:12px;color:#444;transition:all .12s}
+        .ds-item:hover,.ds-item.hov{background:#fff5f5;border-color:#f0c0c0;color:#1a1a1a}
+        .ds-item.dmg{background:#ffeaea;border-color:#f0a0a0;color:#ae050a;font-weight:600}
         .ds-item-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .ds-item-act{font-size:13px;font-weight:700;opacity:.4;transition:opacity .12s;flex-shrink:0}
         .ds-item:hover .ds-item-act,.ds-item.hov .ds-item-act{opacity:1}
         .ds-item.dmg .ds-item-act{color:#ae050a;opacity:.85}
-        .ds-dot{width:7px;height:7px;border-radius:50%;background:#1e3050;flex-shrink:0;transition:all .15s}
-        .ds-dot.red{background:#dd1111;box-shadow:0 0 6px rgba(221,17,17,.8)}
+        .ds-dot{width:7px;height:7px;border-radius:50%;background:#ddd;flex-shrink:0;transition:all .15s}
+        .ds-dot.red{background:#ae050a;box-shadow:0 0 6px rgba(174,5,10,.5)}
         .ds-dot.sm{width:5px;height:5px}
-        .ds-dmg-list{border-top:1px solid #1e2d3d;padding:8px 10px;max-height:140px;overflow-y:auto;flex-shrink:0}
+        .ds-dmg-list{border-top:1px solid #f0c0c0;padding:8px 10px;max-height:140px;overflow-y:auto;flex-shrink:0}
         .ds-dmg-title{font-size:10px;font-weight:700;color:#ae050a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
-        .ds-dmg-row{display:flex;align-items:center;gap:6px;font-size:11px;color:#ff9090;padding:2px 0}
+        .ds-dmg-row{display:flex;align-items:center;gap:6px;font-size:11px;color:#ae050a;padding:2px 0}
         .ds-dmg-name{flex:1}
-        .ds-dmg-rm{background:none;border:none;color:#ff5555;cursor:pointer;font-size:11px;padding:1px 4px;border-radius:3px;opacity:.6;transition:opacity .12s}
+        .ds-dmg-rm{background:none;border:none;color:#ae050a;cursor:pointer;font-size:11px;padding:1px 4px;border-radius:3px;opacity:.6;transition:opacity .12s}
         .ds-dmg-rm:hover{opacity:1}
-        .ds-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:10px;font-size:13px;font-weight:600;z-index:10000;pointer-events:none;white-space:nowrap;animation:toastIn .22s ease;box-shadow:0 6px 24px rgba(0,0,0,.4);background:#0e1c2c;border-left:3px solid #ae050a;color:#ffaaaa}
+        .ds-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:10px;font-size:13px;font-weight:600;z-index:10000;pointer-events:none;white-space:nowrap;animation:toastIn .22s ease;box-shadow:0 6px 24px rgba(0,0,0,.18);background:#fff;border-left:3px solid #ae050a;color:#ae050a}
         @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-        @media(max-width:640px){.ds-body{flex-direction:column;height:auto}.ds-canvas-wrap{height:300px}.ds-panel{width:100%;border-left:none;border-top:1px solid #1e2d3d;height:220px}}
+        @media(max-width:640px){.ds-body{flex-direction:column;height:auto}.ds-canvas-wrap{height:300px}.ds-panel{width:100%;border-left:none;border-top:2px solid #ae050a;height:220px}}
       `}</style>
     </div>
   );
